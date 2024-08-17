@@ -15,3 +15,4 @@ class Dialogs {
             const Center(child: CircularProgressIndicator(strokeWidth: 1)));
   }
 }
+

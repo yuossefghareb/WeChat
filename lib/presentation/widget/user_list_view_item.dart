@@ -55,6 +55,7 @@
 //   }
 // }
 
+import 'package:chat1/core/colors.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -105,57 +106,70 @@ class _ChatUserCardState extends State<ChatUserCard> {
               if (widget.user.id == APIs.user.uid) {
                 return Container();
               }
-              return ListTile(
-                //user profile picture
-                leading: InkWell(
-                  onTap: () {
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (_) => ProfileDialog(user: widget.user));
-                  },
-                  child: ProfileImage(imagename: widget.user.image),
-                ),
+              return Material(
+                elevation: 0.0,
+                color: MyColors.primaryColor,
+                child: ListTile(
+                  //user profile picture
 
-                //user name
-                title: Text(widget.user.name),
+                  leading: InkWell(
+                    onTap: () {
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (_) => ProfileDialog(user: widget.user));
+                    },
+                    child: ProfileImage(imagename: widget.user.image),
+                  ),
 
-                //last message
-                subtitle: widget.showAbout == true
-                    ? Text(widget.user.about)
-                    : Text(
-                        _message != null
-                            ? _message!.type == Type.image
-                                ? 'image'
-                                : _message!.msg
-                            : widget.user.about,
-                        maxLines: 1),
+                  //user name
+                  title: Text(
+                    widget.user.name,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
 
-                //last message time
-                trailing: widget.showAbout == true
-                    ? Text('')
-                    : _message == null
-                        ? null //show nothing when no message is sent
-                        : _message!.read.isEmpty &&
-                                _message!.fromId != APIs.user.uid
-                            ?
-                            //show for unread message
-                            const SizedBox(
-                                width: 15,
-                                height: 15,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 0, 230, 119),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
+                  //last message
+                  subtitle: widget.showAbout == true
+                      ? Text(widget.user.about)
+                      : Text(
+                          _message != null
+                              ? _message!.type == Type.image
+                                  ? 'image'
+                                  : _message!.msg
+                              : widget.user.about,
+                          style: const TextStyle(color: Colors.white),
+                          maxLines: 1),
+
+                  //last message time
+                  trailing: widget.showAbout == true
+                      ? Text('')
+                      : _message == null
+                          ? null //show nothing when no message is sent
+                          : _message!.read.isEmpty &&
+                                  _message!.fromId != APIs.user.uid
+                              ?
+                              //show for unread message
+                              const SizedBox(
+                                  width: 15,
+                                  height: 15,
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                        color: Color.fromARGB(255, 0, 230, 119),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                  ),
+                                )
+                              :
+                              //message sent time
+                              Text(
+                                  MyDateUtil.getLastMessageTime(
+                                      context: context, time: _message!.sent),
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 16),
                                 ),
-                              )
-                            :
-                            //message sent time
-                            Text(
-                                MyDateUtil.getLastMessageTime(
-                                    context: context, time: _message!.sent),
-                                style: const TextStyle(color: Colors.black54),
-                              ),
+                ),
               );
             },
           )),
@@ -167,7 +181,7 @@ class ProfileImage extends StatefulWidget {
   const ProfileImage({
     super.key,
     required this.imagename,
-    this.size = 23,
+    this.size = 25,
   });
 
   final String imagename;

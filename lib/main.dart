@@ -1,9 +1,11 @@
 import 'package:chat1/core/app_router.dart';
 import 'package:chat1/core/cache_helper.dart';
+import 'package:chat1/core/colors.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 
 final Size mq = Size(0, 0);
 
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      color: MyColors.primaryColor,
+      darkTheme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: AppRouter.generateRoute,
       initialRoute: FirebaseAuth.instance.currentUser == null
