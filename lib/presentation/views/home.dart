@@ -13,59 +13,27 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<ChatUser> _list = [];
+  final List<ChatUser> _searchList = [];
+  // for storing search status
+  bool _isSearching = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
-      // appBar: AppBar(
-      //   elevation: 0.0,
-      //   backgroundColor: MyColors.primaryColor,
-      //   title: Text(
-      //     'My Chat',
-      //     style:
-      //         TextStyle(color: MyColors.textColor, fontWeight: FontWeight.bold),
-      //   ),
-      //   leading: Row(
-      //     children: [
-      //       const SizedBox(
-      //         width: 20,
-      //       ),
-      //       InkWell(
-      //         onTap: () {
-      //           Navigator.pushNamed(context, Routes.profile);
-      //         },
-      //         child: BlocBuilder<UserCubit, UserState>(
-      //           builder: (context, state) {
-      //             return CircleAvatar(
-      //               radius: 18,
-      //               backgroundImage: NetworkImage(
-      //                 BlocProvider.of<UserCubit>(context).imageprofile,
-      //               ),
-      //             );
-      //           },
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       onPressed: () {
-      //         FirebaseAuth.instance.signOut();
-      //         Navigator.pushReplacementNamed(context, Routes.login);
-      //       },
-      //       icon: const Icon(Icons.logout, color: Colors.white),
-      //     ),
-      //   ],
-      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, Routes.allUser);
         },
         backgroundColor: Colors.white,
-        
         child: const Icon(
           Icons.chat,
           color: Colors.black,
@@ -81,7 +49,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const SearchWidget(),
+            searchWidget(),
             Flexible(
               child: StreamBuilder(
                   stream: APIs.getMyUsersId(),
@@ -108,16 +76,16 @@ class HomePage extends StatelessWidget {
                               case ConnectionState.active:
                               case ConnectionState.done:
                                 if (snapshot.hasData) {
-                                  final users = snapshot.data!.docs
+                                  _list = snapshot.data!.docs
                                       .map((e) => ChatUser.fromJson(e.data()))
                                       .toList();
 
                                   return ListView.builder(
                                     shrinkWrap: true,
-                                    itemCount: users.length,
+                                    itemCount:_searchList.length != 0 ? _searchList.length : _list.length,
                                     itemBuilder: (context, index) {
                                       return ChatUserCard(
-                                        user: users[index],
+                                        user:_searchList.length != 0 ? _searchList[index] : _list[index],
                                       );
                                     },
                                   );
@@ -137,15 +105,8 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-}
 
-class SearchWidget extends StatelessWidget {
-  const SearchWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget searchWidget() {
     return SizedBox(
       width: double.infinity,
       child: Padding(
@@ -164,13 +125,24 @@ class SearchWidget extends StatelessWidget {
                 child: Container(
                   color: const Color.fromARGB(66, 0, 0, 0),
                   height: 50,
-                  child: const TextField(
+                  child: TextField(
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Color.fromARGB(66, 0, 0, 0),
                       hintText: 'Search',
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
+                    onChanged: (value) {
+                      _searchList.clear();
+                        value = value.toLowerCase();
+                         for (var i in _list) {
+                        if (i.name.toLowerCase().contains(value) ||
+                            i.email.toLowerCase().contains(value)) {
+                          _searchList.add(i);
+                        }
+                      }
+                      setState(() => _searchList);
+                    },
                   ),
                 ),
               ),
@@ -202,6 +174,70 @@ class SearchWidget extends StatelessWidget {
     );
   }
 }
+
+// class SearchWidget extends StatelessWidget {
+//   const SearchWidget({
+//     super.key,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       width: double.infinity,
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+//         child: Container(
+//           decoration: const BoxDecoration(
+//             borderRadius: BorderRadius.only(
+//               topLeft: Radius.circular(10),
+//               bottomLeft: Radius.circular(10),
+//             ),
+//           ),
+//           child: Row(
+//             children: [
+//               Expanded(
+//                 flex: 4,
+//                 child: Container(
+//                   color: const Color.fromARGB(66, 0, 0, 0),
+//                   height: 50,
+//                   child: const TextField(
+//                     decoration: InputDecoration(
+//                       filled: true,
+//                       fillColor: Color.fromARGB(66, 0, 0, 0),
+//                       hintText: 'Search',
+//                       hintStyle: TextStyle(color: Colors.grey),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               Expanded(
+//                 flex: 1,
+//                 child: Container(
+//                   height: 50,
+//                   decoration: const BoxDecoration(
+//                     color: Colors.white,
+//                     borderRadius: BorderRadius.only(
+//                       topRight: Radius.circular(10),
+//                       bottomRight: Radius.circular(10),
+//                     ),
+//                   ),
+//                   child: IconButton(
+//                     onPressed: () {},
+//                     icon: const Icon(
+//                       Icons.search,
+//                       color: Colors.black,
+//                       size: 25,
+//                     ),
+//                   ),
+//                 ),
+//               )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class AppBarWidget extends StatelessWidget {
   const AppBarWidget({
