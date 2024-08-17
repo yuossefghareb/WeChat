@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   List<ChatUser> _list = [];
   final List<ChatUser> _searchList = [];
   // for storing search status
-  bool _isSearching = false;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -175,69 +175,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// class SearchWidget extends StatelessWidget {
-//   const SearchWidget({
-//     super.key,
-//   });
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       width: double.infinity,
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-//         child: Container(
-//           decoration: const BoxDecoration(
-//             borderRadius: BorderRadius.only(
-//               topLeft: Radius.circular(10),
-//               bottomLeft: Radius.circular(10),
-//             ),
-//           ),
-//           child: Row(
-//             children: [
-//               Expanded(
-//                 flex: 4,
-//                 child: Container(
-//                   color: const Color.fromARGB(66, 0, 0, 0),
-//                   height: 50,
-//                   child: const TextField(
-//                     decoration: InputDecoration(
-//                       filled: true,
-//                       fillColor: Color.fromARGB(66, 0, 0, 0),
-//                       hintText: 'Search',
-//                       hintStyle: TextStyle(color: Colors.grey),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Expanded(
-//                 flex: 1,
-//                 child: Container(
-//                   height: 50,
-//                   decoration: const BoxDecoration(
-//                     color: Colors.white,
-//                     borderRadius: BorderRadius.only(
-//                       topRight: Radius.circular(10),
-//                       bottomRight: Radius.circular(10),
-//                     ),
-//                   ),
-//                   child: IconButton(
-//                     onPressed: () {},
-//                     icon: const Icon(
-//                       Icons.search,
-//                       color: Colors.black,
-//                       size: 25,
-//                     ),
-//                   ),
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class AppBarWidget extends StatelessWidget {
   const AppBarWidget({

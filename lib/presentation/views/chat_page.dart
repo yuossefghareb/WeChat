@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:chat1/core/api/apis.dart';
+import 'package:chat1/core/colors.dart';
 import 'package:chat1/core/my_date_util.dart';
 import 'package:chat1/main.dart';
 import 'package:chat1/presentation/views_model/model/chat_user.dart';
@@ -48,7 +49,7 @@ class _ChatPageState extends State<ChatPage> {
 
         //if emojis are shown & back button is pressed then hide emojis
         //or else simple close current screen on back button click
-        canPop: false,
+       // canPop: false,
 
         onPopInvoked: (_) {
           if (_showEmoji) {
@@ -57,13 +58,13 @@ class _ChatPageState extends State<ChatPage> {
           }
 
           // some delay before pop
-          Future.delayed(const Duration(milliseconds: 300), () {
-            try {
-              if (Navigator.canPop(context)) Navigator.pop(context);
-            } catch (e) {
-              print('----------------$e');
-            }
-          });
+          // Future.delayed(const Duration(milliseconds: 300), () {
+          //   try {
+          //     if (Navigator.canPop(context)) Navigator.pop(context);
+          //   } catch (e) {
+          //     print('----------------$e');
+          //   }
+          // });
         },
 
         //
@@ -72,9 +73,20 @@ class _ChatPageState extends State<ChatPage> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             flexibleSpace: _appBar(),
+            elevation: 0.0,
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.video_call),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.call),
+              ),
+            ],
           ),
 
-          backgroundColor: const Color.fromARGB(255, 234, 248, 255),
+          backgroundColor: MyColors.primaryColor,
 
           //body
           body: SafeArea(
@@ -177,16 +189,18 @@ class _ChatPageState extends State<ChatPage> {
                     //back button
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back, color: Colors.black54),
+                      icon: const Icon(
+                        Icons.arrow_back,
+                      ),
                     ),
-
+                    const SizedBox(width: 10),
                     //user profile picture
                     // ProfileImage(
                     //   size: mq.height * .05,
                     //   url: list.isNotEmpty ? list[0].image : widget.user.image,
                     // ),
                     ProfileImage(
-                      size: 18,
+                      size: 20,
                       imagename:
                           list.isNotEmpty ? list[0].image : widget.user.image,
                     ),
@@ -202,9 +216,7 @@ class _ChatPageState extends State<ChatPage> {
                         //user name
                         Text(list.isNotEmpty ? list[0].name : widget.user.name,
                             style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w500)),
+                                fontSize: 20, fontWeight: FontWeight.w500)),
 
                         //for adding some space
                         const SizedBox(height: 2),
@@ -221,7 +233,10 @@ class _ChatPageState extends State<ChatPage> {
                                     context: context,
                                     lastActive: widget.user.lastActive),
                             style: const TextStyle(
-                                fontSize: 13, color: Colors.black54)),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            )),
                       ],
                     )
                   ],
@@ -320,10 +335,9 @@ class _ChatPageState extends State<ChatPage> {
               if (_textController.text.isNotEmpty) {
                 if (_list.isEmpty) {
                   //on first message (add user to my_user collection of chat user)
-                  APIs.addChatUser( widget.user.email);    
+                  APIs.addChatUser(widget.user.email);
                   APIs.sendFirstMessage(
                       widget.user, _textController.text, Type.text);
-                  
                 } else {
                   //simply send message
                   APIs.sendMessage(
