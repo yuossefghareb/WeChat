@@ -20,13 +20,13 @@ class _AllUserPageState extends State<AllUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.primaryColor,
+      backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
         title: const Text(
           'All Users',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: MyColors.primaryColor,
+        backgroundColor: MyColors.backgroundColor,
         centerTitle: true,
         elevation: 0.0,
       ),

@@ -52,7 +52,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
               }
               return Material(
                 elevation: 0.0,
-                color: MyColors.primaryColor,
+                color: MyColors.backgroundColor,
                 child: ListTile(
                   //user profile picture
 

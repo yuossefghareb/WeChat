@@ -29,13 +29,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      color: MyColors.primaryColor,
+      color: MyColors.backgroundColor,
       darkTheme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: AppRouter.generateRoute,
-      initialRoute: FirebaseAuth.instance.currentUser == null
-          ? Routes.login
-          : Routes.home,
+      initialRoute: Routes.splash,
     );
   }
 }

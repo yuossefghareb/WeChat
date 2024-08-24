@@ -7,14 +7,13 @@ class CustomTextForm extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool? cancel;
 
-  const CustomTextForm({
-    super.key,
-    required this.hinttext,
-    required this.mycontroller,
-    required this.validator,
-    this.obscure,
-    this.cancel
-  });
+  const CustomTextForm(
+      {super.key,
+      required this.hinttext,
+      required this.mycontroller,
+      required this.validator,
+      this.obscure,
+      this.cancel});
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +24,10 @@ class CustomTextForm extends StatelessWidget {
         validator: validator,
         obscureText: obscure ?? false,
         decoration: InputDecoration(
-            suffixIcon:cancel?? false ?  const Icon(Icons.cancel_outlined): null,
             hintText: hinttext,
             hintStyle: const TextStyle(fontSize: 14, color: Colors.grey),
-            contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
             filled: true,
             fillColor: Colors.grey[200],
             border: OutlineInputBorder(

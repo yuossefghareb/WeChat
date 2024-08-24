@@ -86,7 +86,7 @@ class _ChatPageState extends State<ChatPage> {
             ],
           ),
 
-          backgroundColor: MyColors.primaryColor,
+          backgroundColor: MyColors.backgroundColor,
 
           //body
           body: SafeArea(

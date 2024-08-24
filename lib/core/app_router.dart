@@ -6,7 +6,8 @@ import 'package:chat1/presentation/views/all_user_page.dart';
 import 'package:chat1/presentation/views/chat_page.dart';
 import 'package:chat1/presentation/views/home.dart';
 import 'package:chat1/presentation/views/profile.dart';
-import 'package:chat1/presentation/views_model/cubit/chat_cubit.dart';
+import 'package:chat1/presentation/views/splash_page.dart';
+
 import 'package:chat1/presentation/views_model/model/chat_user.dart';
 
 import 'package:chat1/presentation/views_model/user/user_cubit.dart';
@@ -54,6 +55,11 @@ class AppRouter {
             user: user,
           ),
         );
+
+      case Routes.splash:
+        return MaterialPageRoute(
+          builder: (_) => const SplashPage(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const LoginPage(),
@@ -71,4 +77,5 @@ class Routes {
   static const String chatPage = '/chatPage';
 
   static const String allUser = '/allUser';
+  static const String splash = '/splash';
 }
