@@ -2,8 +2,8 @@ import 'package:chat1/core/api/apis.dart';
 import 'package:chat1/core/app_router.dart';
 import 'package:chat1/core/colors.dart';
 import 'package:chat1/presentation/views_model/model/chat_user.dart';
+import 'package:chat1/presentation/views_model/profile_cubit/profile_cubit.dart';
 
-import 'package:chat1/presentation/views_model/user/user_cubit.dart';
 import 'package:chat1/presentation/widget/user_list_view_item.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +11,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,8 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<ChatUser> _list = [];
   final List<ChatUser> _searchList = [];
-  // for storing search status
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,10 +80,14 @@ class _HomePageState extends State<HomePage> {
 
                                   return ListView.builder(
                                     shrinkWrap: true,
-                                    itemCount:_searchList.length != 0 ? _searchList.length : _list.length,
+                                    itemCount: _searchList.isNotEmpty
+                                        ? _searchList.length
+                                        : _list.length,
                                     itemBuilder: (context, index) {
                                       return ChatUserCard(
-                                        user:_searchList.length != 0 ? _searchList[index] : _list[index],
+                                        user: _searchList.isNotEmpty
+                                            ? _searchList[index]
+                                            : _list[index],
                                       );
                                     },
                                   );
@@ -126,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                   color: const Color.fromARGB(66, 0, 0, 0),
                   height: 50,
                   child: TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Color.fromARGB(66, 0, 0, 0),
                       hintText: 'Search',
@@ -134,8 +136,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onChanged: (value) {
                       _searchList.clear();
-                        value = value.toLowerCase();
-                         for (var i in _list) {
+                      value = value.toLowerCase();
+                      for (var i in _list) {
                         if (i.name.toLowerCase().contains(value) ||
                             i.email.toLowerCase().contains(value)) {
                           _searchList.add(i);
@@ -175,8 +177,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
-
 class AppBarWidget extends StatelessWidget {
   const AppBarWidget({
     super.key,
@@ -196,15 +196,18 @@ class AppBarWidget extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, Routes.profile);
               },
-              child: BlocBuilder<UserCubit, UserState>(
-                builder: (context, state) {
-                  return CircleAvatar(
-                    radius: 23,
-                    backgroundImage: NetworkImage(
-                      BlocProvider.of<UserCubit>(context).imageprofile,
-                    ),
-                  );
-                },
+              child: BlocProvider(
+                create: (context) => ProfileCubit()..getImage(),
+                child: BlocBuilder<ProfileCubit, ProfileState>(
+                  builder: (context, state) {
+                    return CircleAvatar(
+                      radius: 23,
+                      backgroundImage: NetworkImage(
+                        BlocProvider.of<ProfileCubit>(context).imageprofile,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             const SizedBox(

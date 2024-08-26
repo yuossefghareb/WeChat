@@ -43,7 +43,7 @@ class _MessageCardState extends State<MessageCard> {
         Flexible(
           child: Container(
             padding: EdgeInsets.all(widget.message.type == Type.image ? 7 : 8),
-            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 221, 245, 255),
               border: Border.all(color: Colors.lightBlue),
@@ -126,7 +126,7 @@ class _MessageCardState extends State<MessageCard> {
         Flexible(
           child: Container(
             padding: EdgeInsets.all(widget.message.type == Type.image ? 8 : 8),
-            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 218, 255, 176),
                 border: Border.all(color: Colors.lightGreen),

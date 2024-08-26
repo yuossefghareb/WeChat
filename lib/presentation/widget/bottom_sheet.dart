@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,7 +66,6 @@ void bottomSheet(BuildContext context) {
 
                           BlocProvider.of<ProfileCubit>(context)
                               .updateImage(imagename, file);
-                        
                         }
                       },
                       icon: const Icon(

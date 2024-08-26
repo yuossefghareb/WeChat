@@ -15,17 +15,16 @@ class AuthCubitCubit extends Cubit<AuthCubitState> {
   final Auth _auth;
   CollectionReference user = FirebaseFirestore.instance.collection('users');
   Future<void> addUser(
-      {required String email,
-      required String password,
-      required String name}) async {
+      {required String email, required String password,required String name}) async {
     emit(AddUserLoading());
     try {
       final authResult = await _auth.signUp(email, password);
-      await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
+     await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
       //
       await APIs.createUser().then((value) {
         print('=========user created====================================');
       });
+      CacheHelper.saveData(key: 'doc_id', value: authResult.user!.uid);
 
       emit(AddUserSuccess(authResult));
     } catch (e) {
@@ -39,7 +38,7 @@ class AuthCubitCubit extends Cubit<AuthCubitState> {
     emit(LoginUserLoading());
     try {
       final authResult = await _auth.signin(email, password);
-
+      CacheHelper.saveData(key: 'doc_id', value: authResult.user!.uid);
       emit(LoginUserSuccess(authResult));
     } catch (e) {
       print('===========================$e============================');

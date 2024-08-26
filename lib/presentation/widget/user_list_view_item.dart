@@ -1,4 +1,3 @@
-
 import 'package:chat1/core/colors.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +87,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
 
                   //last message time
                   trailing: widget.showAbout == true
-                      ? Text('')
+                      ? const Text('')
                       : _message == null
                           ? null //show nothing when no message is sent
                           : _message!.read.isEmpty &&

@@ -1,9 +1,6 @@
-import 'package:chat1/auth/login.dart';
 import 'package:chat1/core/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -21,9 +18,10 @@ class _SplashPageState extends State<SplashPage> {
 
   _navigate() async {
     await Future.delayed(const Duration(seconds: 3), () {});
-    Navigator.pushReplacementNamed(context, FirebaseAuth.instance.currentUser == null
-          ? Routes.login
-          : Routes.home,);
+    Navigator.pushReplacementNamed(
+      context,
+      FirebaseAuth.instance.currentUser == null ? Routes.login : Routes.home,
+    );
   }
 
   @override

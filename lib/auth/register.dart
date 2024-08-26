@@ -161,9 +161,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         textColor: Colors.white,
                         onPressed: () {
                           context.read<AuthCubitCubit>().addUser(
-                              name: controllerUser.text,
-                              password: controllerPass.text,
-                              email: controlleremail.text);
+                                name: controllerUser.text,
+                                password: controllerPass.text,
+                                email: controlleremail.text,
+                              );
                         },
                         child: const Text('Register'),
                       ),

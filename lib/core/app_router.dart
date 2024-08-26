@@ -10,7 +10,6 @@ import 'package:chat1/presentation/views/splash_page.dart';
 
 import 'package:chat1/presentation/views_model/model/chat_user.dart';
 
-import 'package:chat1/presentation/views_model/user/user_cubit.dart';
 
 import 'package:flutter/material.dart';
 
@@ -35,10 +34,7 @@ class AppRouter {
         );
       case Routes.home:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => UserCubit()..getAllUsers(),
-            child: const HomePage(),
-          ),
+          builder: (_) => const HomePage(),
         );
       case Routes.allUser:
         return MaterialPageRoute(

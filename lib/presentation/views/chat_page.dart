@@ -49,7 +49,7 @@ class _ChatPageState extends State<ChatPage> {
 
         //if emojis are shown & back button is pressed then hide emojis
         //or else simple close current screen on back button click
-       // canPop: false,
+        // canPop: false,
 
         onPopInvoked: (_) {
           if (_showEmoji) {

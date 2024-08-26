@@ -21,11 +21,12 @@ class CustomTextForm extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         controller: mycontroller,
+        style: const TextStyle(color: Colors.black),
         validator: validator,
         obscureText: obscure ?? false,
         decoration: InputDecoration(
             hintText: hinttext,
-            hintStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+            hintStyle: const TextStyle(fontSize: 14, color: Colors.black),
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
             filled: true,

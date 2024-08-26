@@ -1,15 +1,12 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:chat1/core/api/notofication_acess_token.dart';
 import 'package:chat1/presentation/views_model/model/chat_user.dart';
 import 'package:chat1/presentation/views_model/model/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:http/http.dart';
 
 class APIs {
   // for authentication
@@ -21,7 +18,8 @@ class APIs {
 
   // for accessing firebase storage
   static FirebaseStorage storage = FirebaseStorage.instance;
-
+  // to return current user
+  static User get user => auth.currentUser!;
   // for storing self information
   static ChatUser me = ChatUser(
       id: user.uid,
@@ -33,9 +31,6 @@ class APIs {
       isOnline: false,
       lastActive: '',
       pushToken: '');
-
-  // to return current user
-  static User get user => auth.currentUser!;
 
   // for accessing firebase messaging (Push Notification)
   static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
@@ -66,16 +61,6 @@ class APIs {
   static Future<void> sendPushNotification(
       ChatUser chatUser, String msg) async {
     try {
-      final body = {
-        "message": {
-          "token": chatUser.pushToken,
-          "notification": {
-            "title": me.name, //our name should be send
-            "body": msg,
-          },
-        }
-      };
-
       // Firebase Project > Project Settings > General Tab > Project ID
       const projectID = 'we-chat-75f13';
 
@@ -202,20 +187,16 @@ class APIs {
 
     return firestore
         .collection('users')
-        .where('id',
-            whereIn: userIds.isEmpty
-                ? ['']
-                : userIds) 
-                //because empty list throws an error') //because empty list throws an error
+        .where('id', whereIn: userIds.isEmpty ? [''] : userIds)
+        //because empty list throws an error') //because empty list throws an error
         // .where('id', isNotEqualTo: user.uid)
         .snapshots();
   }
 
   // for adding an user to my user when first message is send
   static Future<void> sendFirstMessage(
-    
       ChatUser chatUser, String msg, Type type) async {
-          print("first mseess-===================");
+    print("first mseess-===================");
     await firestore
         .collection('users')
         .doc(chatUser.id)
@@ -250,6 +231,7 @@ class APIs {
 
     //updating image in firestore database
     me.image = await ref.getDownloadURL();
+   
     await firestore
         .collection('users')
         .doc(user.uid)
