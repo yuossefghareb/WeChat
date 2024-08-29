@@ -199,7 +199,7 @@ class AppBarWidget extends StatelessWidget {
                 Navigator.pushNamed(context, Routes.profile);
               },
               child: StreamBuilder<DocumentSnapshot>(
-                stream: getProfileImageStream(),
+                stream: APIs.getProfileImage(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator(); // Show a loading indicator while the stream is loading
@@ -244,10 +244,5 @@ class AppBarWidget extends StatelessWidget {
     );
   }
 
-  Stream<DocumentSnapshot> getProfileImageStream() {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(APIs.user.uid)
-        .snapshots();
-  }
+ 
 }

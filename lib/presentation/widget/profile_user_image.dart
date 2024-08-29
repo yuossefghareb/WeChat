@@ -1,5 +1,5 @@
 import 'package:chat1/core/api/apis.dart';
-import 'package:chat1/core/widgets/custom_cached_image.dart';
+import 'package:chat1/presentation/widget/custom_cached_image.dart';
 
 import 'package:chat1/presentation/widget/bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,7 +37,7 @@ class _ProfileUserImageState extends State<ProfileUserImage> {
       alignment: Alignment.center,
       children: [
         StreamBuilder<DocumentSnapshot>(
-          stream: getProfileImageStream(),
+          stream: APIs.getProfileImage(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
@@ -87,10 +87,5 @@ class _ProfileUserImageState extends State<ProfileUserImage> {
     );
   }
 
-  Stream<DocumentSnapshot> getProfileImageStream() {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(APIs.user.uid)
-        .snapshots();
-  }
+  
 }

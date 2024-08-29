@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class APIs {
   // for authentication
@@ -31,8 +32,6 @@ class APIs {
       isOnline: false,
       lastActive: '',
       pushToken: '');
-
-
 
   // for accessing firebase messaging (Push Notification)
   static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
@@ -199,20 +198,16 @@ class APIs {
 
     return firestore
         .collection('users')
-        .where('id',
-            whereIn: userIds.isEmpty
-                ? ['']
-                : userIds) 
-                //because empty list throws an error') //because empty list throws an error
+        .where('id', whereIn: userIds.isEmpty ? [''] : userIds)
+        //because empty list throws an error') //because empty list throws an error
         // .where('id', isNotEqualTo: user.uid)
         .snapshots();
   }
 
   // for adding an user to my user when first message is send
   static Future<void> sendFirstMessage(
-    
       ChatUser chatUser, String msg, Type type) async {
-          print("first mseess-===================");
+    print("first mseess-===================");
     await firestore
         .collection('users')
         .doc(chatUser.id)
@@ -230,27 +225,49 @@ class APIs {
   }
 
   // update profile picture of user
-  static Future<void> updateProfilePicture(File file) async {
-    //getting image file extension
-    final ext = file.path.split('.').last;
-    log('Extension: $ext');
+  static Future<String?> updateProfileImage(XFile image, String userId) async {
+    try {
+      // Create a reference to Firebase Storage
+      Reference storageRef =
+          FirebaseStorage.instance.ref().child('profile_images/$userId.jpg');
 
-    //storage file ref with path
-    final ref = storage.ref().child('profile_pictures/${user.uid}.$ext');
+      // Upload the file to the reference
+      UploadTask uploadTask = storageRef.putFile(File(image.path));
 
-    //uploading image
-    await ref
-        .putFile(file, SettableMetadata(contentType: 'image/$ext'))
-        .then((p0) {
-      log('Data Transferred: ${p0.bytesTransferred / 1000} kb');
-    });
+      // Wait until the upload is complete
+      TaskSnapshot taskSnapshot = await uploadTask;
 
-    //updating image in firestore database
-    me.image = await ref.getDownloadURL();
-    await firestore
+      // Get the download URL
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      print('Download URL: $downloadURL');
+      return downloadURL;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return "";
+    }
+  }
+
+  static Future<void> saveProfileImageUrl(String imageUrl) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(APIs.user.uid)
+          .update({
+        'image': imageUrl,
+      });
+
+      print('Image URL saved successfully');
+    } catch (e) {
+      print('Error saving image URL: $e');
+    }
+  }
+  //
+
+  static Stream<DocumentSnapshot> getProfileImage() {
+    return FirebaseFirestore.instance
         .collection('users')
-        .doc(user.uid)
-        .update({'image': me.image});
+        .doc(APIs.user.uid)
+        .snapshots();
   }
 
   // for getting specific user info

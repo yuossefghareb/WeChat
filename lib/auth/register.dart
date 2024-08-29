@@ -3,7 +3,7 @@ import 'package:chat1/auth/cubit/auth_cubit_cubit.dart';
 import 'package:chat1/core/app_router.dart';
 import 'package:chat1/core/colors.dart';
 
-import 'package:chat1/core/widgets/custom_text_filed.dart';
+import 'package:chat1/presentation/widget/custom_text_filed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

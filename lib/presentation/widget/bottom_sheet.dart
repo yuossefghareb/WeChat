@@ -55,8 +55,8 @@ void bottomSheet(BuildContext context) {
                       //  var imagename = basename(pickedFile.path);
                       Navigator.of(context).pop();
                       final imageUrl =
-                          await uploadImage(pickedFile, APIs.user.uid);
-                        await  saveProfileImageUrl(imageUrl!);
+                          await APIs.updateProfileImage(pickedFile, APIs.user.uid);
+                        await APIs.saveProfileImageUrl(imageUrl!);
                     }
                   },
                   icon: const Icon(
@@ -83,39 +83,6 @@ void bottomSheet(BuildContext context) {
   );
 }
 
-Future<String?> uploadImage(XFile image, String userId) async {
-  try {
-    // Create a reference to Firebase Storage
-    Reference storageRef =
-        FirebaseStorage.instance.ref().child('profile_images/$userId.jpg');
 
-    // Upload the file to the reference
-    UploadTask uploadTask = storageRef.putFile(File(image.path));
 
-    // Wait until the upload is complete
-    TaskSnapshot taskSnapshot = await uploadTask;
 
-    // Get the download URL
-    String downloadURL = await taskSnapshot.ref.getDownloadURL();
-    print('Download URL: $downloadURL');
-    return downloadURL;
-  } catch (e) {
-    print('Error uploading image: $e');
-    return "";
-  }
-}
-
-Future<void> saveProfileImageUrl(String imageUrl) async {
-  try {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(APIs.user.uid)
-        .update({
-      'image': imageUrl,
-    });
-
-    print('Image URL saved successfully');
-  } catch (e) {
-    print('Error saving image URL: $e');
-  }
-}
