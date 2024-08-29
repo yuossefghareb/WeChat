@@ -23,15 +23,16 @@ class APIs {
   static User get user => auth.currentUser!;
   // for storing self information
   static ChatUser me = ChatUser(
-      id: user.uid,
-      name: user.displayName.toString(),
-      email: user.email.toString(),
-      about: "Hey, I'm using We Chat!",
-      image: user.photoURL.toString(),
-      createdAt: '',
-      isOnline: false,
-      lastActive: '',
-      pushToken: '');
+    id: user.uid,
+    name: user.displayName.toString(),
+    email: user.email.toString(),
+    about: "Hey, I'm using We Chat!",
+    image: user.photoURL.toString(),
+    createdAt: '',
+    isOnline: false,
+    lastActive: '',
+    pushToken: '',
+  );
 
   // for accessing firebase messaging (Push Notification)
   static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
@@ -178,7 +179,7 @@ class APIs {
         .doc(user.uid)
         .collection('my_users')
         .snapshots();
-    // return firestore.collection('users').snapshots();
+    
   }
 
 //@yuossefghareb
@@ -188,7 +189,7 @@ class APIs {
         .collection('users')
         .where('id', isNotEqualTo: me.id)
         .snapshots();
-    // return firestore.collection('users').snapshots();
+    
   }
 
   // for getting all users from firestore database
@@ -228,19 +229,40 @@ class APIs {
   static Future<String?> updateProfileImage(XFile image, String userId) async {
     try {
       // Create a reference to Firebase Storage
+      // Step 1: Get the old profile image URL
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      String? oldImageUrl = userDoc['image'];
+
+      // Step 2: Delete the old image from Firebase Storage if it exists
+      if (oldImageUrl != null && oldImageUrl.isNotEmpty) {
+        try {
+          // Extract the reference path from the URL
+          Reference oldImageRef =
+              FirebaseStorage.instance.refFromURL(oldImageUrl);
+          await oldImageRef.delete();
+          print('Old image deleted successfully.');
+        } catch (e) {
+          print('Error deleting old image: $e');
+        }
+      }
+
+      // Step 3: Upload the new image
       Reference storageRef =
           FirebaseStorage.instance.ref().child('profile_images/$userId.jpg');
-
-      // Upload the file to the reference
       UploadTask uploadTask = storageRef.putFile(File(image.path));
-
-      // Wait until the upload is complete
       TaskSnapshot taskSnapshot = await uploadTask;
+      String newImageUrl = await taskSnapshot.ref.getDownloadURL();
 
-      // Get the download URL
-      String downloadURL = await taskSnapshot.ref.getDownloadURL();
-      print('Download URL: $downloadURL');
-      return downloadURL;
+      // Step 4: Update the Firestore document with the new image URL
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'image': newImageUrl,
+      });
+
+      print('New image uploaded and Firestore updated.');
+      return newImageUrl;
     } catch (e) {
       print('Error uploading image: $e');
       return "";
@@ -263,10 +285,10 @@ class APIs {
   }
   //
 
-  static Stream<DocumentSnapshot> getProfileImage() {
+  static Stream<DocumentSnapshot> getProfileImage(String userId) {
     return FirebaseFirestore.instance
         .collection('users')
-        .doc(APIs.user.uid)
+        .doc(userId)
         .snapshots();
   }
 

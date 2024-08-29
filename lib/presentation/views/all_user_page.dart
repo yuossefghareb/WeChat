@@ -4,7 +4,6 @@ import 'package:chat1/presentation/views_model/model/chat_user.dart';
 import 'package:chat1/presentation/widget/user_list_view_item.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AllUserPage extends StatefulWidget {
   const AllUserPage({super.key});

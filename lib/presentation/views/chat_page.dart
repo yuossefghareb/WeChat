@@ -8,6 +8,7 @@ import 'package:chat1/main.dart';
 import 'package:chat1/presentation/views_model/model/chat_user.dart';
 import 'package:chat1/presentation/views_model/model/message.dart';
 import 'package:chat1/presentation/widget/message_card.dart';
+import 'package:chat1/presentation/widget/profile_image.dart';
 import 'package:chat1/presentation/widget/user_list_view_item.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
@@ -201,8 +202,8 @@ class _ChatPageState extends State<ChatPage> {
                     // ),
                     ProfileImage(
                       size: 20,
-                      imagename:
-                          list.isNotEmpty ? list[0].image : widget.user.image,
+                      userid:
+                          list.isNotEmpty ? list[0].id : widget.user.id,
                     ),
 
                     //for adding some space

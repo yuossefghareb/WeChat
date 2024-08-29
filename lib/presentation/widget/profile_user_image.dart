@@ -14,7 +14,7 @@ class ProfileUserImage extends StatefulWidget {
     required this.top,
     required this.cameraSize,
     this.image,
-    this.isEdit = true,
+    this.isEdit = true, this.userid,
   });
   final double iconSize;
   final double right;
@@ -22,6 +22,7 @@ class ProfileUserImage extends StatefulWidget {
   final bool isEdit;
   final double cameraSize;
   final String? image;
+  final String? userid;
 
   @override
   State<ProfileUserImage> createState() => _ProfileUserImageState();
@@ -37,7 +38,7 @@ class _ProfileUserImageState extends State<ProfileUserImage> {
       alignment: Alignment.center,
       children: [
         StreamBuilder<DocumentSnapshot>(
-          stream: APIs.getProfileImage(),
+          stream: APIs.getProfileImage(widget.userid ?? APIs.user.uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();

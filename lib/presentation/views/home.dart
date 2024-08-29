@@ -11,7 +11,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -199,7 +198,7 @@ class AppBarWidget extends StatelessWidget {
                 Navigator.pushNamed(context, Routes.profile);
               },
               child: StreamBuilder<DocumentSnapshot>(
-                stream: APIs.getProfileImage(),
+                stream: APIs.getProfileImage(APIs.user.uid),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator(); // Show a loading indicator while the stream is loading

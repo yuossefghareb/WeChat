@@ -19,6 +19,7 @@ class _SplashPageState extends State<SplashPage> {
   _navigate() async {
     await Future.delayed(const Duration(seconds: 3), () {});
     Navigator.pushReplacementNamed(
+      // ignore: use_build_context_synchronously
       context,
       FirebaseAuth.instance.currentUser == null ? Routes.login : Routes.home,
     );

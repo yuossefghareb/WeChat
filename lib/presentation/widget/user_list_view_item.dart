@@ -1,4 +1,7 @@
 import 'package:chat1/core/colors.dart';
+import 'package:chat1/presentation/widget/profile_dialog.dart';
+import 'package:chat1/presentation/widget/profile_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -57,11 +60,13 @@ class _ChatUserCardState extends State<ChatUserCard> {
 
                   leading: InkWell(
                     onTap: () {
-                      // showDialog(
-                      //     context: context,
-                      //     builder: (_) => ProfileDialog(user: widget.user));
+                      showDialog(
+                          context: context,
+                          builder: (_) => ProfileDialog(user: widget.user));
                     },
-                    child: ProfileImage(imagename: widget.user.image),
+                    child: ProfileImage(
+                      userid: widget.user.id,
+                    ),
                   ),
 
                   //user name
@@ -116,54 +121,6 @@ class _ChatUserCardState extends State<ChatUserCard> {
               );
             },
           )),
-    );
-  }
-}
-
-class ProfileImage extends StatefulWidget {
-  const ProfileImage({
-    super.key,
-    required this.imagename,
-    this.size = 25,
-  });
-
-  final String imagename;
-  final double size;
-
-  @override
-  State<ProfileImage> createState() => _ProfileImageState();
-}
-
-class _ProfileImageState extends State<ProfileImage> {
-  String urlimage =
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadImageUrl();
-  }
-
-  void _loadImageUrl() async {
-    urlimage = await getUrl();
-    setState(() {});
-  }
-
-  Future<String> getUrl() async {
-    var imagename = widget.imagename;
-    if (imagename == "null" || imagename == '') {
-      return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-    } else {
-      var refStorage = FirebaseStorage.instance.ref("UserImages/$imagename");
-      return await refStorage.getDownloadURL();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: widget.size.toDouble(),
-      backgroundImage: NetworkImage(urlimage),
     );
   }
 }

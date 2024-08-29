@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-const Size mq = Size(0, 0);
+const Size mq = Size(411, 899);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
