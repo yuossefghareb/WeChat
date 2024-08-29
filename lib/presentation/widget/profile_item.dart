@@ -33,16 +33,17 @@ class ProfileItem extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 value.length < 30
-                    ? Text(value, style: TextStyle(fontSize: 16))
+                    ? Text(value, style: const TextStyle(fontSize: 16))
                     : Text(value.substring(0, 30),
-                        style: TextStyle(fontSize: 16)),
+                        style: const TextStyle(fontSize: 16)),
               ],
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Icon(iconData, color: Colors.blue),
           ],
         ),

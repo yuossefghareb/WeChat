@@ -37,7 +37,7 @@ class CustomCachedImage extends StatelessWidget {
           );
         },
         progressIndicatorBuilder: (context, url, progress) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         },
       ),
     );

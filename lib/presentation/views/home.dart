@@ -1,16 +1,18 @@
 import 'package:chat1/core/api/apis.dart';
 import 'package:chat1/core/app_router.dart';
 import 'package:chat1/core/colors.dart';
+
 import 'package:chat1/presentation/views_model/model/chat_user.dart';
-import 'package:chat1/presentation/views_model/profile_cubit/profile_cubit.dart';
+
 
 import 'package:chat1/presentation/widget/user_list_view_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -196,18 +198,27 @@ class AppBarWidget extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, Routes.profile);
               },
-              child: BlocProvider(
-                create: (context) => ProfileCubit()..getImage(),
-                child: BlocBuilder<ProfileCubit, ProfileState>(
-                  builder: (context, state) {
-                    return CircleAvatar(
-                      radius: 23,
-                      backgroundImage: NetworkImage(
-                        BlocProvider.of<ProfileCubit>(context).imageprofile,
-                      ),
-                    );
-                  },
-                ),
+              child: StreamBuilder<DocumentSnapshot>(
+                stream: getProfileImageStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator(); // Show a loading indicator while the stream is loading
+                  }
+                  if (snapshot.hasError) {
+                    return const Icon(Icons.error,
+                        size: 50); // Show an error icon if there's an error
+                  }
+                  if (!snapshot.hasData || !snapshot.data!.exists) {
+                    return const Icon(Icons.account_circle, size: 50);
+                  }
+
+                  String? imageUrl = snapshot.data!['image'];
+
+                  return CircleAvatar(
+                    radius: 23,
+                    backgroundImage: NetworkImage(imageUrl ?? ''),
+                  );
+                },
               ),
             ),
             const SizedBox(
@@ -231,5 +242,12 @@ class AppBarWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Stream<DocumentSnapshot> getProfileImageStream() {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(APIs.user.uid)
+        .snapshots();
   }
 }

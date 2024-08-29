@@ -1,9 +1,10 @@
+import 'package:chat1/core/api/apis.dart';
 import 'package:chat1/core/widgets/custom_cached_image.dart';
-import 'package:chat1/presentation/views_model/profile_cubit/profile_cubit.dart';
+
 import 'package:chat1/presentation/widget/bottom_sheet.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class ProfileUserImage extends StatefulWidget {
   const ProfileUserImage({
@@ -27,45 +28,41 @@ class ProfileUserImage extends StatefulWidget {
 }
 
 class _ProfileUserImageState extends State<ProfileUserImage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    BlocProvider.of<ProfileCubit>(context).getImage();
-    super.initState();
-  }
-
+  
+  
   @override
   Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
       children: [
-        BlocBuilder<ProfileCubit, ProfileState>(
-          builder: (context, state) {
-            if (state is ProfileSuccess) {
-              return Container(
-                width: 129,
-                height: 129,
-                padding: const EdgeInsets.all(2.5),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 177, 168, 168),
-                  borderRadius: BorderRadius.circular(200),
-                  border: widget.image != null
-                      ? Border.all(color: Colors.blue, width: 2)
-                      : null,
-                ),
-                child: CustomCachedImage(
-                  imageUrl: BlocProvider.of<ProfileCubit>(context).imageprofile,
-                  width: 115,
-                  height: 115,
-                  errorIconSize: 60,
-                ),
-              );
-            } else if (state is ProfileError) {
-              return Text(state.error);
-            } else {
+        StreamBuilder<DocumentSnapshot>(
+          stream: getProfileImageStream(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             }
+            if (snapshot.hasError || !snapshot.hasData) {
+              return const Icon(Icons.account_circle, size: 50);
+            }
+            return Container(
+              width: 129,
+              height: 129,
+              padding: const EdgeInsets.all(2.5),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 177, 168, 168),
+                borderRadius: BorderRadius.circular(200),
+                border: widget.image != null
+                    ? Border.all(color: Colors.blue, width: 2)
+                    : null,
+              ),
+              child: CustomCachedImage(
+                imageUrl: snapshot.data!['image'],
+                width: 115,
+                height: 115,
+                errorIconSize: 60,
+              ),
+            );
           },
         ),
         if (widget.isEdit)
@@ -88,5 +85,12 @@ class _ProfileUserImageState extends State<ProfileUserImage> {
           ),
       ],
     );
+  }
+
+  Stream<DocumentSnapshot> getProfileImageStream() {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(APIs.user.uid)
+        .snapshots();
   }
 }

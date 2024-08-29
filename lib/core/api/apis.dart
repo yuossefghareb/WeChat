@@ -32,6 +32,8 @@ class APIs {
       lastActive: '',
       pushToken: '');
 
+
+
   // for accessing firebase messaging (Push Notification)
   static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
 
@@ -61,6 +63,16 @@ class APIs {
   static Future<void> sendPushNotification(
       ChatUser chatUser, String msg) async {
     try {
+      final body = {
+        "message": {
+          "token": chatUser.pushToken,
+          "notification": {
+            "title": me.name, //our name should be send
+            "body": msg,
+          },
+        }
+      };
+
       // Firebase Project > Project Settings > General Tab > Project ID
       const projectID = 'we-chat-75f13';
 
@@ -187,16 +199,20 @@ class APIs {
 
     return firestore
         .collection('users')
-        .where('id', whereIn: userIds.isEmpty ? [''] : userIds)
-        //because empty list throws an error') //because empty list throws an error
+        .where('id',
+            whereIn: userIds.isEmpty
+                ? ['']
+                : userIds) 
+                //because empty list throws an error') //because empty list throws an error
         // .where('id', isNotEqualTo: user.uid)
         .snapshots();
   }
 
   // for adding an user to my user when first message is send
   static Future<void> sendFirstMessage(
+    
       ChatUser chatUser, String msg, Type type) async {
-    print("first mseess-===================");
+          print("first mseess-===================");
     await firestore
         .collection('users')
         .doc(chatUser.id)
@@ -231,7 +247,6 @@ class APIs {
 
     //updating image in firestore database
     me.image = await ref.getDownloadURL();
-   
     await firestore
         .collection('users')
         .doc(user.uid)

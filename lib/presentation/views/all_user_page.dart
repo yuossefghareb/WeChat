@@ -61,7 +61,7 @@ class _AllUserPageState extends State<AllUserPage> {
                             _searchList.isEmpty ? length : _searchList.length,
                         itemBuilder: (context, index) {
                           return ChatUserCard(
-                              user: _searchList.length != 0
+                              user: _searchList.isNotEmpty
                                   ? _searchList[index]
                                   : _list[index],
                               showAbout: true);
@@ -95,7 +95,7 @@ class _AllUserPageState extends State<AllUserPage> {
                   color: const Color.fromARGB(66, 0, 0, 0),
                   height: 50,
                   child: TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Color.fromARGB(66, 0, 0, 0),
                       hintText: 'Search',

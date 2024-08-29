@@ -13,7 +13,7 @@ class CustomProfileEditName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
           border: Border.all(color: Colors.blue)),
@@ -35,10 +35,10 @@ class CustomProfileEditName extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(fontSize: 12)
+                      style: const TextStyle(fontSize: 12)
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 6),
+                    const SizedBox(width: 6),
                     const Icon(Icons.person, color: Colors.blue, size: 20),
                   ],
                 ),
@@ -46,10 +46,10 @@ class CustomProfileEditName extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               name,
-              style: TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 12),
               textDirection: TextDirection.rtl,
             ),
           )

@@ -1,8 +1,9 @@
-import 'package:chat1/presentation/views_model/profile_cubit/profile_cubit.dart';
+import 'package:chat1/core/api/apis.dart';
+
 import 'package:chat1/presentation/widget/profile_item.dart';
 import 'package:chat1/presentation/widget/profile_user_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class ProfilePageBody extends StatelessWidget {
   const ProfilePageBody({super.key});
@@ -23,34 +24,30 @@ class ProfilePageBody extends StatelessWidget {
                 cameraSize: 21,
               ),
               const SizedBox(height: 30),
-              BlocBuilder<ProfileCubit, ProfileState>(
-                builder: (context, state) {
-                  return Column(
-                    children: [
-                      ProfileItem(
-                        title: "Name",
-                        value: BlocProvider.of<ProfileCubit>(context).name,
-                        iconData: Icons.person,
-                        onpressed: () {},
-                      ),
-                      const SizedBox(height: 22),
-                      ProfileItem(
-                        title: "about",
-                        value: BlocProvider.of<ProfileCubit>(context).about,
-                        iconData: Icons.info,
-                        onpressed: () {},
-                      ),
-                      const SizedBox(height: 22),
-                      ProfileItem(
-                        title: "email",
-                        value: BlocProvider.of<ProfileCubit>(context).email,
-                        iconData: Icons.email,
-                        isEdit: false,
-                        onpressed: () {},
-                      ),
-                    ],
-                  );
-                },
+              Column(
+                children: [
+                  ProfileItem(
+                    title: "Name",
+                    value: APIs.me.name,
+                    iconData: Icons.person,
+                    onpressed: () {},
+                  ),
+                  const SizedBox(height: 22),
+                  ProfileItem(
+                    title: "about",
+                    value: APIs.me.about,
+                    iconData: Icons.info,
+                    onpressed: () {},
+                  ),
+                  const SizedBox(height: 22),
+                  ProfileItem(
+                    title: "email",
+                    value: APIs.me.email,
+                    iconData: Icons.email,
+                    isEdit: false,
+                    onpressed: () {},
+                  ),
+                ],
               ),
             ],
           ),
