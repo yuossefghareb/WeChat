@@ -125,7 +125,9 @@ class APIs {
           .doc(user.uid)
           .collection('my_users')
           .doc(data.docs.first.id)
-          .set({});
+          .set({
+            'isFavourite': true,
+          });
 
       return true;
     } else {
@@ -133,6 +135,15 @@ class APIs {
 
       return false;
     }
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getFavouriteUsers() {
+    return firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('my_users')
+        .where('isFavourite', isEqualTo: true)
+        .snapshots();
   }
 
   // for getting current user info
@@ -179,7 +190,6 @@ class APIs {
         .doc(user.uid)
         .collection('my_users')
         .snapshots();
-    
   }
 
 //@yuossefghareb
@@ -189,7 +199,6 @@ class APIs {
         .collection('users')
         .where('id', isNotEqualTo: me.id)
         .snapshots();
-    
   }
 
   // for getting all users from firestore database
@@ -218,11 +227,22 @@ class APIs {
   }
 
   // for updating user information
-  static Future<void> updateUserInfo() async {
-    await firestore.collection('users').doc(user.uid).update({
-      'name': me.name,
-      'about': me.about,
-    });
+  static Future<void> updateUserInfo(
+      String userId, String? name, String? about) async {
+    if (name != null) {
+      await firestore.collection('users').doc(userId).update({
+        'name': name,
+      }).then((value) => getSelfInfo());
+    } else {
+      await firestore.collection('users').doc(userId).update({
+        'about': about,
+      }).then((value) => getSelfInfo());
+    }
+
+    if (userId == user.uid) {
+      await FirebaseAuth.instance.currentUser!
+          .updateDisplayName(name ?? me.name);
+    }
   }
 
   // update profile picture of user
@@ -269,11 +289,12 @@ class APIs {
     }
   }
 
-  static Future<void> saveProfileImageUrl(String imageUrl) async {
+  static Future<void> saveProfileImageUrl(String imageUrl, String userId) async {
+    //! and here
     try {
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(APIs.user.uid)
+          .doc(userId)
           .update({
         'image': imageUrl,
       });

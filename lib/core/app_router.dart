@@ -2,14 +2,15 @@ import 'package:chat1/auth/cubit/auth_cubit_cubit.dart';
 import 'package:chat1/auth/firebase_auth.dart';
 import 'package:chat1/auth/login.dart';
 import 'package:chat1/auth/register.dart';
+import 'package:chat1/core/api/apis.dart';
 import 'package:chat1/presentation/views/all_user_page.dart';
 import 'package:chat1/presentation/views/chat_page.dart';
 import 'package:chat1/presentation/views/home.dart';
 import 'package:chat1/presentation/views/profile.dart';
+import 'package:chat1/presentation/views/profile_edit_page.dart';
 import 'package:chat1/presentation/views/splash_page.dart';
 
 import 'package:chat1/presentation/views_model/model/chat_user.dart';
-
 
 import 'package:flutter/material.dart';
 
@@ -56,6 +57,15 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const SplashPage(),
         );
+      case Routes.profileEdit:
+        var user = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => ProfileEditPage(
+            title: user['title'],
+            value: user['value'],
+            userid: user['userid'],
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const LoginPage(),
@@ -74,4 +84,5 @@ class Routes {
 
   static const String allUser = '/allUser';
   static const String splash = '/splash';
+  static const String profileEdit = '/profileEdit';
 }

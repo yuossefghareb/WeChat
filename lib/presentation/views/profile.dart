@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key, this.user});
 
-  final ChatUser? user;
+  final ChatUser ?user;
   
   @override
   Widget build(BuildContext context) {

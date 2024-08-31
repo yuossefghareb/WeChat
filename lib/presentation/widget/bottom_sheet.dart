@@ -1,13 +1,10 @@
-
-
 import 'package:chat1/core/api/apis.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:image_picker/image_picker.dart';
 // ignore: depend_on_referenced_packages
 
-void bottomSheet(BuildContext context) {
+void bottomSheet(BuildContext context,String userid) {
+  //!!!!!!!! and here
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext ctx) {
@@ -27,9 +24,10 @@ void bottomSheet(BuildContext context) {
                         await picker.pickImage(source: ImageSource.camera);
                     if (pickedFile != null) {
                       Navigator.of(context).pop();
+                      //! and here
                       final imageUrl = await APIs.updateProfileImage(
-                          pickedFile, APIs.user.uid);
-                      await APIs.saveProfileImageUrl(imageUrl!);
+                          pickedFile, userid);
+                      await APIs.saveProfileImageUrl(imageUrl!, userid);
                     }
                   },
                   icon: const Icon(Icons.camera_alt,
@@ -55,9 +53,10 @@ void bottomSheet(BuildContext context) {
                         await picker.pickImage(source: ImageSource.gallery);
                     if (pickedFile != null) {
                       Navigator.of(context).pop();
+                      //! and here
                       final imageUrl = await APIs.updateProfileImage(
-                          pickedFile, APIs.user.uid);
-                      await APIs.saveProfileImageUrl(imageUrl!);
+                          pickedFile, userid);
+                      await APIs.saveProfileImageUrl(imageUrl!, userid);
                     }
                   },
                   icon: const Icon(

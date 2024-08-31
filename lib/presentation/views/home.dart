@@ -3,7 +3,8 @@ import 'package:chat1/core/app_router.dart';
 import 'package:chat1/core/colors.dart';
 
 import 'package:chat1/presentation/views_model/model/chat_user.dart';
-
+import 'package:chat1/presentation/widget/favourite_list_view.dart';
+import 'package:chat1/presentation/widget/favourite_user_item.dart';
 
 import 'package:chat1/presentation/widget/user_list_view_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,7 +12,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,18 +39,33 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            const AppBarWidget(),
-            const SizedBox(
-              height: 10,
-            ),
-            searchWidget(),
-            Flexible(
-              child: StreamBuilder(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              const AppBarWidget(),
+              const SizedBox(
+                height: 10,
+              ),
+              searchWidget(),
+              const Padding(
+                padding: EdgeInsets.only(left: 40, bottom: 10),
+                child: Text(
+                  'Favourite ',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 30),
+                child: FavouriteListView(),
+              ),
+              StreamBuilder(
                   stream: APIs.getMyUsersId(),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
@@ -102,8 +117,8 @@ class _HomePageState extends State<HomePage> {
                         );
                     }
                   }),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -195,7 +210,8 @@ class AppBarWidget extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Navigator.pushNamed(context, Routes.profile);
+                Navigator.pushNamed(context, Routes.profile,
+                    arguments: APIs.me);
               },
               child: StreamBuilder<DocumentSnapshot>(
                 stream: APIs.getProfileImage(APIs.user.uid),
@@ -242,6 +258,4 @@ class AppBarWidget extends StatelessWidget {
       ],
     );
   }
-
- 
 }

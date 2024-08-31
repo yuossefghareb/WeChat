@@ -29,8 +29,6 @@ class ProfileImage extends StatelessWidget {
               snapshot.data!['image'] == 'null') {
             return CircleAvatar(
               radius: size.toDouble(),
-              backgroundImage:
-                  const NetworkImage("https://i.stack.imgur.com/l60Hf.png"),
             );
           }
           return CircleAvatar(

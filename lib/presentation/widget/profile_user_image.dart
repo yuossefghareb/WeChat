@@ -72,7 +72,7 @@ class _ProfileUserImageState extends State<ProfileUserImage> {
             top: widget.top,
             child: IconButton(
               onPressed: () {
-                bottomSheet(context);
+                bottomSheet(context,widget.userid??APIs.user.uid);
               },
               icon: Icon(
                 Icons.add_a_photo_outlined,
